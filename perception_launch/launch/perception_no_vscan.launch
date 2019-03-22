@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<launch>
+    <group ns="perception">
+        <include file="$(find euclidean_cluster)/launch/euclidean_cluster.launch">
+            <arg name="input" default="/points_no_ground"/>
+        </include>
+        <include file="$(find shape_estimation)/launch/shape_estimation.launch" />
+        <include file="$(find vision_darknet_detect)/launch/vision_yolo3_detect.launch" />
+        <include file="$(find roi_cluster_fusion)/launch/roi_cluster_fusion.launch" />
+        <include file="$(find dynamic_object_visualization)/launch/dynamic_object_visualizer.launch" />
+    </group>
+</launch>

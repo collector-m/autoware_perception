@@ -1,0 +1,6 @@
+geometry_msgs/PoseWithCovariance pose
+bool pose_reliable
+geometry_msgs/TwistWithCovariance velocity
+bool velocity_reliable
+geometry_msgs/AccelWithCovariance acceleration
+bool acceleration_reliable

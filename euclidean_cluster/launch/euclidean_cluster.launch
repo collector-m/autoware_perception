@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="input" default="vscan/pointcloud"/>
+    <arg name="output" default="clusters"/>
+
+  <node pkg="nodelet" type="nodelet" name="pcl_manager" args="manager" output="screen" />
+
+  <!-- Run a VoxelGrid filter to clean NaNs and downsample the data -->
+  <node pkg="nodelet" type="nodelet" name="voxel_grid" args="load pcl/VoxelGrid pcl_manager" output="screen">
+    <remap from="~input" to="$(arg input)" />
+    <remap from="~output" to="$(arg input)/filtered" />
+    <rosparam>
+        filter_field_name: z
+        filter_limit_min: -10.0
+        filter_limit_max: 10.0
+        filter_limit_negative: False
+        leaf_size: 0.1
+      </rosparam>
+    </node>
+
+    <node pkg="euclidean_cluster" type="euclidean_cluster_node" name="euclidean_cluster">
+        <rosparam>
+            target_frame: base_link
+            use_height: false
+            tolerance: 0.65
+            min_cluster_size: 3
+            max_cluster_size: 400
+        </rosparam>
+        <remap from="vscan/pointcloud" to="$(arg input)/filtered"/>
+        <remap from="clusters" to="$(arg output)"/>
+    </node>
+
+</launch>

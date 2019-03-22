@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="input_rois" default="rois"/>
+    <arg name="input_clusters" default="clusters"/>
+    <arg name="input_camera_info" default="/camera_info"/>
+    <arg name="output" default="labeled_clusters"/>
+
+
+    <node pkg="roi_cluster_fusion" type="roi_cluster_fusion_node" name="roi_cluster_fusion" output="screen">
+        <rosparam>
+            use_iou: false
+            use_iou_x: true
+            use_iou_y: false
+            iou_threshold: 0.7
+        </rosparam>
+        <remap from="clusters" to="$(arg input_clusters)"/>
+        <remap from="rois" to="$(arg input_rois)"/>
+        <remap from="camera_info" to="$(arg input_camera_info)"/>
+        <remap from="labeled_clusters" to="$(arg output)"/>
+    </node>
+
+</launch>
