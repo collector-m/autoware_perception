@@ -52,6 +52,9 @@ void RoiClusterFusionNodelet::cameraInfoCallback(const sensor_msgs::CameraInfoCo
 void RoiClusterFusionNodelet::fusionCallback(const autoware_msgs::DynamicObjectWithFeatureArrayConstPtr &input_cluster_msg,
                                              const autoware_msgs::DynamicObjectWithFeatureArrayConstPtr &input_roi_msg)
 {
+    // Guard
+    if (labeled_cluster_pub_.getNumSubscribers() < 1)
+        return;
     if (camera_info_ptr_ == nullptr)
     {
         ROS_WARN("no camera info");

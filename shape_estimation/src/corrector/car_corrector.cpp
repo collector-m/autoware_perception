@@ -18,6 +18,9 @@
  */
 
 #include "car_corrector.hpp"
+#include "tf2/LinearMath/Matrix3x3.h"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #define EIGEN_MPL2_ONLY
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -218,6 +221,19 @@ bool CarCorrector::correct(autoware_msgs::Shape &shape_output,
     shape_output.dimensions.y += std::abs(correction_vector.y()) * 2.0;
     pose_output.position.x += (rotate.toRotationMatrix() * correction_vector).x();
     pose_output.position.y += (rotate.toRotationMatrix() * correction_vector).y();
+
+    // correct to set long length is x, short length is y
+    if (shape_output.dimensions.x < shape_output.dimensions.y)
+    {
+        double roll, pitch, yaw;
+        tf2::Quaternion quaternion;
+        tf2::fromMsg(pose_output.orientation, quaternion);
+        tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+        double yaw_90_rotated = yaw + M_PI_2;
+        tf2::Quaternion corrected_quaternion;
+        corrected_quaternion.setRPY(roll, pitch, yaw_90_rotated);
+        pose_output.orientation = tf2::toMsg(corrected_quaternion);
+    }
 
     return true;
 }

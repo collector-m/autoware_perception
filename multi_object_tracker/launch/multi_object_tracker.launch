@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="input" default="shape_estimeted_objects"/>
+    <arg name="output" default="tracker/objects"/>
+
+    <node pkg="multi_object_tracker" type="multi_object_tracker_node" name="multi_object_tracker" output="screen">
+        <remap from="input" to="$(arg input)"/>
+        <remap from="output" to="$(arg output)"/>
+    </node>
+
+</launch>

@@ -261,6 +261,9 @@ image Yolo3DetectorNode::convert_ipl_to_image(const sensor_msgs::ImageConstPtr& 
 
 void Yolo3DetectorNode::image_callback(const sensor_msgs::ImageConstPtr& in_image_message)
 {
+    // Guard
+    if (publisher_objects_.getNumSubscribers() < 1)
+        return;
     std::vector< RectClassScore<float> > detections;
 
     darknet_image_ = convert_ipl_to_image(in_image_message);

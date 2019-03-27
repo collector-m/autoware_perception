@@ -7,13 +7,13 @@
 
 bool VectorMap::load()
 {
-    auto points = ros::topic::waitForMessage<vector_map_msgs::PointArray>("/vector_map_info/point", ros::Duration(10.0));
+    auto points = ros::topic::waitForMessage<vector_map_msgs::PointArray>("/vector_map_info/point", ros::Duration());
     if(!points)
     {
         return false;
     }
 
-    auto dtlanes = ros::topic::waitForMessage<vector_map_msgs::DTLaneArray>("/vector_map_info/dtlane", ros::Duration(10.0));
+    auto dtlanes = ros::topic::waitForMessage<vector_map_msgs::DTLaneArray>("/vector_map_info/dtlane", ros::Duration());
     if(!dtlanes)
     {
         return false;
